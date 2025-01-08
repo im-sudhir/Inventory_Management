@@ -1,0 +1,28 @@
+# Core Django dependencies
+Django==4.2.5
+
+# REST API framework
+djangorestframework==3.14.0
+
+# Database connectors
+psycopg2-binary==2.9.7  # PostgreSQL
+# mysqlclient==2.1.1    # Uncomment for MySQL support (if needed)
+
+# Production server
+gunicorn==20.1.0
+
+# Environment variable management
+django-environ==0.10.0
+
+# Image handling (e.g., for user-uploaded images)
+Pillow==10.0.0
+
+# Security and performance
+django-cors-headers==4.0.0  # For handling CORS in APIs
+whitenoise==6.5.0           # For serving static files in production
+
+# Testing
+pytest-django==4.5.2
+factory-boy==3.2.1
+
+# Optional: Add any other library you need
