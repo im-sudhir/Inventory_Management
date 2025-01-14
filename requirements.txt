@@ -28,3 +28,4 @@ factory-boy==3.2.1
 # Optional: Add any other library you need
 django-filter
 drf-spectacular
+djangorestframework-simplejwt
