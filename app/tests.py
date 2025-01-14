@@ -1,17 +1,29 @@
 from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
+from rest_framework_simplejwt.tokens import AccessToken
+from django.contrib.auth.models import User
 from .models import InventoryItem
 
 class InventoryItemAPITestCase(APITestCase):
 
     def setUp(self):
+        # Create a test user
+        self.user = User.objects.create_user(username="testuser", password="testpassword")
+        
+        # Generate JWT access token for the user
+        self.token = str(AccessToken.for_user(self.user))
+        
+        # Include the token in the client's Authorization header
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token}')
+        
         # Create a test inventory item
         self.item = InventoryItem.objects.create(
             name="Test Item", 
             description="Test Description", 
             in_stock=True
         )
+        
         # Define URLs for list and detail views
         self.list_url = reverse('items')
         self.detail_url = reverse('item-detailview', kwargs={'pk': self.item.id})
@@ -86,3 +98,9 @@ class InventoryItemAPITestCase(APITestCase):
         url = reverse('item-detailview', kwargs={'pk': 999})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_unauthenticated_access(self):
+        # Test accessing endpoints without authentication
+        self.client.credentials()  # Remove token
+        response = self.client.get(self.list_url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
